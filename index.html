@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration Form</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="form-header">
+            <h1><i class="fas fa-user-plus"></i> Create Account</h1>
+            <p>Join us today and start your journey</p>
+        </div>
+        
+        <div class="form-body">
+            <form id="registrationForm" novalidate>
+                <!-- Name Fields -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name *</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="firstName" name="firstName" required>
+                        </div>
+                        <div class="error-message" id="firstNameError">First name is required</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name *</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="lastName" name="lastName" required>
+                        </div>
+                        <div class="error-message" id="lastNameError">Last name is required</div>
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="email">Email Address *</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="error-message" id="emailError">Please enter a valid email address</div>
+                    </div>
+                </div>
+
+                <!-- Password -->
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="password">Password *</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="password" name="password" required>
+                        </div>
+                        <div class="password-strength">
+                            <div class="strength-bar">
+                                <div class="strength-fill" id="strengthFill"></div>
+                            </div>
+                            <div class="strength-text" id="strengthText">Enter a password</div>
+                        </div>
+                        <div class="error-message" id="passwordError">Password must be at least 8 characters</div>
+                    </div>
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="confirmPassword">Confirm Password *</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="confirmPassword" name="confirmPassword" required>
+                        </div>
+                        <div class="error-message" id="confirmPasswordError">Passwords do not match</div>
+                    </div>
+                </div>
+
+                <!-- Date of Birth and Gender -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="dateOfBirth">Date of Birth *</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-calendar"></i>
+                            <input type="date" id="dateOfBirth" name="dateOfBirth" required>
+                        </div>
+                        <div class="error-message" id="dobError">Please select your date of birth</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Gender *</label>
+                        <div class="gender-options">
+                            <div class="radio-option">
+                                <input type="radio" id="male" name="gender" value="male" required>
+                                <label for="male">Male</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="female" name="gender" value="female" required>
+                                <label for="female">Female</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="other" name="gender" value="other" required>
+                                <label for="other">Other</label>
+                            </div>
+                        </div>
+                        <div class="error-message" id="genderError">Please select your gender</div>
+                    </div>
+                </div>
+
+                <!-- Profile Picture -->
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="profilePicture">Profile Picture</label>
+                        <div class="input-wrapper">
+                            <input type="file" id="profilePicture" name="profilePicture" accept="image/*">
+                        </div>
+                        <div class="profile-preview">
+                            <img id="previewImage" class="preview-image" alt="Profile Preview">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Terms and Conditions -->
+                <div class="terms-group">
+                    <input type="checkbox" id="terms" name="terms" required>
+                    <div class="terms-text">
+                        <label for="terms">
+                            I agree to the <a href="#" target="_blank">Terms and Conditions</a> and 
+                            <a href="#" target="_blank">Privacy Policy</a>. I understand that my information 
+                            will be processed according to these terms.
+                        </label>
+                    </div>
+                </div>
+                <div class="error-message" id="termsError">You must agree to the terms and conditions</div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="submit-btn" id="submitBtn" disabled>
+                    <i class="fas fa-user-plus"></i> Create Account
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Form elements
+        const form = document.getElementById('registrationForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const profilePicture = document.getElementById('profilePicture');
+        const previewImage = document.getElementById('previewImage');
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirmPassword');
+        const strengthFill = document.getElementById('strengthFill');
+        const strengthText = document.getElementById('strengthText');
+
+        // Validation functions
+        function validateField(field, errorId, validationFn) {
+            const errorElement = document.getElementById(errorId);
+            const isValid = validationFn(field.value);
+            
+            if (isValid) {
+                field.classList.remove('invalid');
+                field.classList.add('valid');
+                errorElement.classList.remove('show');
+            } else {
+                field.classList.remove('valid');
+                field.classList.add('invalid');
+                errorElement.classList.add('show');
+            }
+            
+            return isValid;
+        }
+
+        function validateEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        function validatePassword(password) {
+            return password.length >= 8;
+        }
+
+        function checkPasswordStrength(password) {
+            let strength = 0;
+            let strengthClass = '';
+            let strengthLabel = '';
+
+            if (password.length === 0) {
+                strengthLabel = 'Enter a password';
+                strengthClass = '';
+            } else if (password.length < 6) {
+                strength = 1;
+                strengthLabel = 'Weak';
+                strengthClass = 'weak';
+            } else if (password.length < 10) {
+                strength = 2;
+                strengthLabel = 'Medium';
+                strengthClass = 'medium';
+                
+                // Check for additional criteria
+                if (/[A-Z]/.test(password) && /[0-9]/.test(password) && /[^A-Za-z0-9]/.test(password)) {
+                    strength = 3;
+                    strengthLabel = 'Strong';
+                    strengthClass = 'strong';
+                }
+            } else {
+                strength = 3;
+                strengthLabel = 'Strong';
+                strengthClass = 'strong';
+            }
+
+            strengthFill.className = `strength-fill ${strengthClass}`;
+            strengthText.className = `strength-text ${strengthClass}`;
+            strengthText.textContent = strengthLabel;
+        }
+
+        function validateForm() {
+            const firstName = validateField(
+                document.getElementById('firstName'),
+                'firstNameError',
+                value => value.trim().length > 0
+            );
+
+            const lastName = validateField(
+                document.getElementById('lastName'),
+                'lastNameError',
+                value => value.trim().length > 0
+            );
+
+            const email = validateField(
+                document.getElementById('email'),
+                'emailError',
+                validateEmail
+            );
+
+            const passwordValid = validateField(
+                document.getElementById('password'),
+                'passwordError',
+                validatePassword
+            );
+
+            const confirmPasswordValid = validateField(
+                document.getElementById('confirmPassword'),
+                'confirmPasswordError',
+                value => value === password.value && value.length > 0
+            );
+
+            const dob = validateField(
+                document.getElementById('dateOfBirth'),
+                'dobError',
+                value => value !== ''
+            );
+
+            const gender = document.querySelector('input[name="gender"]:checked');
+            const genderError = document.getElementById('genderError');
+            if (gender) {
+                genderError.classList.remove('show');
+            } else {
+                genderError.classList.add('show');
+            }
+
+            const terms = document.getElementById('terms');
+            const termsError = document.getElementById('termsError');
+            if (terms.checked) {
+                termsError.classList.remove('show');
+            } else {
+                termsError.classList.add('show');
+            }
+
+            const isValid = firstName && lastName && email && passwordValid && 
+                           confirmPasswordValid && dob && gender && terms.checked;
+
+            submitBtn.disabled = !isValid;
+            return isValid;
+        }
+
+        // Event listeners
+        password.addEventListener('input', function() {
+            checkPasswordStrength(this.value);
+            validateForm();
+        });
+
+        confirmPassword.addEventListener('input', validateForm);
+
+        // Profile picture preview
+        profilePicture.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImage.src = e.target.result;
+                    previewImage.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                previewImage.style.display = 'none';
+            }
+        });
+
+        // Add event listeners to all form fields
+        const formFields = form.querySelectorAll('input, select');
+        formFields.forEach(field => {
+            field.addEventListener('input', validateForm);
+            field.addEventListener('change', validateForm);
+        });
+
+        // Form submission
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (validateForm()) {
+                // Simulate form submission
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
+                submitBtn.disabled = true;
+                
+                setTimeout(() => {
+                    alert('Account created successfully! Welcome aboard!');
+                    form.reset();
+                    previewImage.style.display = 'none';
+                    strengthFill.className = 'strength-fill';
+                    strengthText.className = 'strength-text';
+                    strengthText.textContent = 'Enter a password';
+                    
+                    // Reset all field styles
+                    formFields.forEach(field => {
+                        field.classList.remove('valid', 'invalid');
+                    });
+                    
+                    submitBtn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
+                    submitBtn.disabled = true;
+                }, 2000);
+            }
+        });
+
+        // Initial validation
+        validateForm();
+    </script>
+</body>
+</html>
